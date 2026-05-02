@@ -1,4 +1,4 @@
-import { Auth, AuthGuard } from '@app/common';
+import { Auth, AuthGuard, Page } from '@app/common';
 import { Exam } from '@app/domains/entities/exam.entity';
 import {
   Body,
@@ -87,12 +87,7 @@ export class ExamController {
   @ApiResponse({
     status: 200,
     description: '考试列表',
-    type: () => ({
-      data: [Exam],
-      total: Number,
-      page: Number,
-      pageSize: Number,
-    }),
+    type: Page<Exam>,
   })
   async getExamList(@Query() query: ExamListQueryDto) {
     return this.examService.findAll(query);

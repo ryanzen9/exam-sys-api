@@ -2,6 +2,7 @@ import { Global, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import 'dotenv/config';
 import { DomainsService } from './domains.service';
+import { Answer } from './entities/answer.entity';
 import { Exam } from './entities/exam.entity';
 import { User } from './entities/user.entity';
 
@@ -17,7 +18,7 @@ import { User } from './entities/user.entity';
       database: process.env.DATABASE_NAME,
       synchronize: true,
       logging: true,
-      entities: [User, Exam],
+      entities: [User, Exam, Answer],
       poolSize: 10,
       connectorPackage: 'mysql2',
       extra: {},

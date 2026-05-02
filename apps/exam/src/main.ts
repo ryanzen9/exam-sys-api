@@ -27,8 +27,5 @@ async function bootstrap() {
   app.startAllMicroservices();
 
   await app.listen(process.env.port ?? 3000);
-  console.log(
-    `Exam service is running on http://localhost:${process.env.port ?? 3000}`,
-  );
 }
 bootstrap();

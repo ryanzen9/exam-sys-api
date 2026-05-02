@@ -21,6 +21,7 @@ export type ExamContent = Array<{
   type: 'single-choice' | 'multiple-choice' | 'true-false';
   options: string[];
   answer: string | string[];
+  points: number;
   description?: string;
 }>;
 
@@ -71,7 +72,7 @@ export class Exam {
   })
   @ApiProperty({
     description: '考试内容',
-    type: Array<ExamContent>,
+    type: Object,
   })
   content: ExamContent;
 
