@@ -1,7 +1,7 @@
 import { CommonModule } from '@app/common';
 import { DomainsModule } from '@app/domains';
 import { EmailModule } from '@app/email';
-import { JwtModule } from '@app/jwt/jwt.module';
+import { JwtModule } from '@app/jwt';
 import { RedisModule } from '@app/redis';
 import { Module } from '@nestjs/common';
 import { UserController } from './user.controller';
