@@ -6,6 +6,7 @@ import {
   IsEnum,
   IsInt,
   IsNotEmpty,
+  IsNumber,
   IsOptional,
   IsString,
   Max,
@@ -27,6 +28,14 @@ export class QuestionDto {
   @IsString({ message: '题目必须是字符串' })
   @IsNotEmpty({ message: '题目不能为空' })
   title: string;
+
+  @ApiProperty({ description: '分数' })
+  @IsNotEmpty({ message: '分数不能为空' })
+  @IsNumber(
+    { maxDecimalPlaces: 2 },
+    { message: '分数必须是数字，且最多两位小数' },
+  )
+  points: number;
 
   @ApiProperty({
     description: '题目类型',

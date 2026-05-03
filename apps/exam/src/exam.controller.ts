@@ -1,4 +1,4 @@
-import { Auth, AuthGuard, Page } from '@app/common';
+import { Auth, AuthGuard, Page, UserInfo } from '@app/common';
 import { Exam } from '@app/domains/entities/exam.entity';
 import {
   Body,
@@ -19,7 +19,6 @@ import {
   ApiBody,
   ApiOperation,
   ApiParam,
-  ApiQuery,
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -41,8 +40,8 @@ export class ExamController {
   @ApiOperation({ summary: '创建考试' })
   @ApiBody({ type: CreateExamDto, description: '考试创建信息' })
   @ApiResponse({ status: 201, description: '创建成功', type: Exam })
-  async save(@Body() createExamDto: CreateExamDto) {
-    return this.examService.save(createExamDto);
+  async save(@UserInfo() user, @Body() createExamDto: CreateExamDto) {
+    return this.examService.save(user.id, createExamDto);
   }
 
   @Put('exam/:id')
@@ -83,7 +82,6 @@ export class ExamController {
 
   @Get('exam')
   @ApiOperation({ summary: '获取考试列表' })
-  @ApiQuery({ type: ExamListQueryDto, description: '分页查询参数' })
   @ApiResponse({
     status: 200,
     description: '考试列表',
