@@ -1,4 +1,3 @@
-import { Optional } from '@nestjs/common';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import {
@@ -48,7 +47,7 @@ export class AnswerListQueryDto {
   @IsInt({ message: '考试ID必须是整数' })
   @Min(1, { message: '考试ID最小为 1' })
   @Type(() => Number)
-  @Optional()
+  @IsOptional()
   examId?: number;
 
   @ApiPropertyOptional({ description: '页码', example: 1, default: 1 })
