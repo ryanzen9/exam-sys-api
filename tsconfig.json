@@ -52,6 +52,12 @@
       "@app/jwt/*": [
         "libs/jwt/src/*"
       ],
+      "@app/nacos": [
+        "libs/nacos/src"
+      ],
+      "@app/nacos/*": [
+        "libs/nacos/src/*"
+      ],
       "@app/redis": [
         "libs/redis/src"
       ],

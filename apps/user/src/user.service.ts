@@ -1,5 +1,6 @@
 import { User } from '@app/domains/entities/user.entity';
 import { EmailService } from '@app/email';
+import { NacosService } from '@app/nacos';
 import { RedisService } from '@app/redis';
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -20,6 +21,9 @@ export class UserService {
 
   @Inject()
   private readonly redisService: RedisService;
+
+  @Inject()
+  private readonly nacosService: NacosService;
 
   async getUserInfo(userId: number) {
     const userRepo = this.entityManager.getRepository(User);
@@ -52,7 +56,11 @@ export class UserService {
       username: user.username,
     });
 
-    return { success: true, accessToken: token, message: '登录成功' };
+    const message = await this.nacosService.getConfig(
+      'LOGGING_SUCCESS_MESSAGE',
+      'DEFAULT_GROUP',
+    );
+    return { success: true, accessToken: token, message };
   }
 
   async sendCode(email: string) {

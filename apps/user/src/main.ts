@@ -1,3 +1,4 @@
+import { NacosService } from '@app/nacos';
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -20,6 +21,27 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 
-  await app.listen(process.env.port ?? 3001);
+  const nacosService = app.get(NacosService);
+  await nacosService.registry('user-service', {
+    ip: process.env.SERVICE_HOST || 'localhost',
+    instanceId: process.env.INSTANCE_ID || 'default-instance-id',
+    port: parseInt(process.env.PORT ?? '3001', 10),
+    weight: 1,
+    healthy: true,
+    enabled: true,
+  });
+
+  process.on('SIGINT', () => {
+    return nacosService.deregisterInstance('user-service', {
+      ip: process.env.SERVICE_HOST || 'localhost',
+      instanceId: process.env.INSTANCE_ID || 'default-instance-id',
+      port: parseInt(process.env.PORT ?? '3001', 10),
+      weight: 1,
+      healthy: true,
+      enabled: true,
+    });
+  });
+
+  await app.listen(process.env.PORT ?? 3001);
 }
 bootstrap();
