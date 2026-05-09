@@ -42,6 +42,9 @@ export class AnswerService {
     const answer = new Answer({
       exam,
       user,
+      score: 0,
+      content: [],
+      status: AnswerStatus.Draft,
     });
 
     const savedAnswer = await this.answerRepo.save(answer);
@@ -53,7 +56,10 @@ export class AnswerService {
     id: number,
     submitAnswerDto: SubmitAnswerDto,
   ): Promise<Answer> {
-    const answer = await this.answerRepo.findOneBy({ id });
+    const answer = await this.answerRepo.findOne({
+      where: { id },
+      relations: ['exam', 'user'],
+    });
 
     if (!answer) {
       throw new Error('Answer not found');
@@ -86,6 +92,7 @@ export class AnswerService {
         user: { id: userId },
         exam: { id: query.examId },
       },
+      relations: ['exam'],
       skip: (page - 1) * pageSize,
       take: pageSize,
     });
@@ -126,9 +133,12 @@ export class AnswerService {
         const correctAnswers = content.answer as string[];
         const userAnswers = userAnswer.answer as string[];
 
+        console.log('Correct Answers:', correctAnswers);
+        console.log('User Answers:', userAnswers);
+
         const isCorrect =
-          correctAnswers.length === userAnswers.length &&
-          correctAnswers.every((a) => userAnswers.includes(a));
+          correctAnswers?.length === userAnswers?.length &&
+          correctAnswers?.every((a) => userAnswers.includes(a));
 
         if (isCorrect) {
           score += content.points;
